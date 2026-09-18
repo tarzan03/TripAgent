@@ -1,0 +1,45 @@
+> git push origin dev_tripagent:dev_tripagent
+remote: error: GH013: Repository rule violations found for refs/heads/dev_tripagent.        
+remote: 
+remote: - GITHUB PUSH PROTECTION        
+remote:   —————————————————————————————————————————        
+remote:     Resolve the following violations before pushing again        
+remote: 
+remote:     - Push cannot contain secrets        
+remote: 
+remote:             
+remote:      (?) Learn how to resolve a blocked push        
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push        
+remote:             
+remote:             
+remote:       —— Groq API Key ——————————————————————————————————————        
+remote:        locations:        
+remote:          - commit: 78c0e96e6ebf2eb1cc704b28f00a42b56c365d5c        
+remote:            path: .env:1        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/tarzan03/TripAgent/security/secret-scanning/unblock-secret/3JSjj4aKtXeSF38EYzBBD7qsqhC        
+remote:             
+remote:             
+remote:       —— OpenAI API Key ————————————————————————————————————        
+remote:        locations:        
+remote:          - commit: 78c0e96e6ebf2eb1cc704b28f00a42b56c365d5c        
+remote:            path: .env:3        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/tarzan03/TripAgent/security/secret-scanning/unblock-secret/3JSjj9pn4LToc3ruUrP3S1JE3V6        
+remote:             
+remote:             
+remote:       —— LangSmith Personal Access Token ———————————————————        
+remote:        locations:        
+remote:          - commit: 78c0e96e6ebf2eb1cc704b28f00a42b56c365d5c        
+remote:            path: .env:4        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/tarzan03/TripAgent/security/secret-scanning/unblock-secret/3JSjj7X51SctPxYbpD2Lh6LPCqT        
+remote:             
+remote: 
+remote: 
+To https://github.com/tarzan03/TripAgent.git
+ ! [remote rejected] dev_tripagent -> dev_tripagent (push declined due to repository rule violations)
+error: failed to push some refs to 'https://github.com/tarzan03/TripAgent.git'
