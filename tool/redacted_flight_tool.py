@@ -1,183 +1,183 @@
-import os
-import re
+# import os
+# import re
 
-import airportsdata
-import pycountry
+# import airportsdata
+# import pycountry
 
-import sys
-from pathlib import Path
+# import sys
+# from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
-from aliases import CITY_MAIN_AIRPORT, COUNTRY_ALIASES, COUNTRY_MAIN_AIRPORT
+# sys.path.insert(0, str(Path(__file__).parent))
+# from tool.redacted_aliases import CITY_MAIN_AIRPORT, COUNTRY_ALIASES, COUNTRY_MAIN_AIRPORT
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
-API_KEY = os.getenv("AVIATIONSTACK_API_KEY")
+# API_KEY = os.getenv("AVIATIONSTACK_API_KEY")
 
-DEFAULT_ORIGIN_IATA = os.getenv("DEFAULT_ORIGIN_IATA", "DEL")
+# DEFAULT_ORIGIN_IATA = os.getenv("DEFAULT_ORIGIN_IATA", "DEL")
 
-AIRPORTS = airportsdata.load("IATA")
-
-
-def clean_text(text: str):
-    text = text.lower().strip()
-    text = re.sub(f"^a-z0-9", " ", text)
-    text = re.sub(r"\s+", " ", text)
-
-    stop_words = [
-        "flights",
-        "flight",
-        "trip",
-        "travel",
-        "plan",
-        "Complete",
-        "sightseeing",
-        "ticket",
-        "tickets",
-        "under",
-        "budget",
-        "info",
-    ]
-
-    words = [w for w in text.split() if w not in stop_words]
-    return " ".join(words).strip()
+# AIRPORTS = airportsdata.load("IATA")
 
 
-def country_name_to_code(text: str):
-    text = clean_text(text)
+# def clean_text(text: str):
+#     text = text.lower().strip()
+#     text = re.sub(f"^a-z0-9", " ", text)
+#     text = re.sub(r"\s+", " ", text)
 
-    if text in COUNTRY_ALIASES:
-        return COUNTRY_ALIASES["text"]
+#     stop_words = [
+#         "flights",
+#         "flight",
+#         "trip",
+#         "travel",
+#         "plan",
+#         "Complete",
+#         "sightseeing",
+#         "ticket",
+#         "tickets",
+#         "under",
+#         "budget",
+#         "info",
+#     ]
 
-    try:
-        country = pycountry.countries.lookup(text)
-        return country.alpha_2
-    except LookupError:
-        pass
-
-    # Detect country name inside longer text
-
-    for country in pycountry.countries:
-        country_name = country.name.lower()
-        print(country_name)
-        if country_name in text:
-            return country.alpha_2
-
-    for alias, code in COUNTRY_ALIASES.items():
-        if alias in text:
-            return code
-
-    return None
+#     words = [w for w in text.split() if w not in stop_words]
+#     return " ".join(words).strip()
 
 
-def airport_country_matches(airoprt: dict, country_code: str) -> bool:
-    airport_country = str(airport.get("country", " ")).upper().strip()
+# def country_name_to_code(text: str):
+#     text = clean_text(text)
 
-    if airport_country == country_code:
-        return True
+#     if text in COUNTRY_ALIASES:
+#         return COUNTRY_ALIASES["text"]
 
-    try:
-        country = pycountry.countries.get(alpha_2=country_code)
-        if country and airport_country.lower() == country.name.lower():
-            return True
+#     try:
+#         country = pycountry.countries.lookup(text)
+#         return country.alpha_2
+#     except LookupError:
+#         pass
 
-    except Exception:
-        pass
+#     # Detect country name inside longer text
 
-    return False
+#     for country in pycountry.countries:
+#         country_name = country.name.lower()
+#         print(country_name)
+#         if country_name in text:
+#             return country.alpha_2
 
+#     for alias, code in COUNTRY_ALIASES.items():
+#         if alias in text:
+#             return code
 
-def best_airport_for_country(country_code: str):
-    preferred = COUNTRY_MAIN_AIRPORT.get(country_code)
-
-    if preferred and preferred in AIRPORTS:
-        return preferred
-
-    candidates = []
-
-    for iata, airports in AIRPORTS.items():
-        if not iata:
-            continue
-
-        if airport_country_matches(airport, country_code):
-            name = str(airport.get("name", "")).lower()
-            city = str(airport.get("city", "")).lower()
-
-            score = 0
-
-            if "international" in name:
-                score += 50
-
-            if "intl" in name:
-                score += 40
-
-            if "capital" in name:
-                score += 20
-
-            if city:
-                score += 5
-
-            candidates.append((score, iata))
-
-    if not candidates:
-        return None
-    candidates.sort(reverse=True)
-    return candidates[0][1]
+#     return None
 
 
-def resolve_location_to_iata(locatoin: str):
+# def airport_country_matches(airoprt: dict, country_code: str) -> bool:
+#     airport_country = str(airport.get("country", " ")).upper().strip()
 
-    if not location:
-        return None
+#     if airport_country == country_code:
+#         return True
 
-    raw_location = location.strip()
+#     try:
+#         country = pycountry.countries.get(alpha_2=country_code)
+#         if country and airport_country.lower() == country.name.lower():
+#             return True
 
-    # Direct IATA code
-    if re.fullmatch(r"[A-Za-z]{3}", raw_location):
-        code = raw_location.upper()
-        if code in AIRPORTS:
-            return code
+#     except Exception:
+#         pass
 
-    location_clean = clean_text(raw_location)
+#     return False
 
-    if not location_clean:
-        return None
 
-    if location_clean in CITY_MAIN_AIRPORT:
-        return CITY_MAIN_AIRPORT[location_clean]
+# def best_airport_for_country(country_code: str):
+#     preferred = COUNTRY_MAIN_AIRPORT.get(country_code)
 
-    # country preferred airport
-    country_code = country_name_to_code(location_clean)
-    if country_code:
-        airport = best_airport_for_country(location_clean)
-        return airport
+#     if preferred and preferred in AIRPORTS:
+#         return preferred
 
-    city_matches = []
+#     candidates = []
 
-    for iata, airport in AIRPORTS.items():
-        name = str(airport.get("name", "")).lower()
-        city = str(airport.get("city", "")).lower()
+#     for iata, airports in AIRPORTS.items():
+#         if not iata:
+#             continue
 
-        score = 0
+#         if airport_country_matches(airport, country_code):
+#             name = str(airport.get("name", "")).lower()
+#             city = str(airport.get("city", "")).lower()
 
-        if city == location_clean:
-            score += 100
-        elif location_clean in city:
-            score += 70
+#             score = 0
 
-        if location_clean in name:
-            score += 50
+#             if "international" in name:
+#                 score += 50
 
-        if "international" in name:
-            score += 10
+#             if "intl" in name:
+#                 score += 40
 
-        if score > 0:
-            city_matches.append((score, iata))
+#             if "capital" in name:
+#                 score += 20
 
-    if city_matches:
-        city_matches.sort(reverse=True)
-        return city_matches[0][1]
+#             if city:
+#                 score += 5
 
-    return None
+#             candidates.append((score, iata))
+
+#     if not candidates:
+#         return None
+#     candidates.sort(reverse=True)
+#     return candidates[0][1]
+
+
+# def resolve_location_to_iata(locatoin: str):
+
+#     if not location:
+#         return None
+
+#     raw_location = location.strip()
+
+#     # Direct IATA code
+#     if re.fullmatch(r"[A-Za-z]{3}", raw_location):
+#         code = raw_location.upper()
+#         if code in AIRPORTS:
+#             return code
+
+#     location_clean = clean_text(raw_location)
+
+#     if not location_clean:
+#         return None
+
+#     if location_clean in CITY_MAIN_AIRPORT:
+#         return CITY_MAIN_AIRPORT[location_clean]
+
+#     # country preferred airport
+#     country_code = country_name_to_code(location_clean)
+#     if country_code:
+#         airport = best_airport_for_country(location_clean)
+#         return airport
+
+#     city_matches = []
+
+#     for iata, airport in AIRPORTS.items():
+#         name = str(airport.get("name", "")).lower()
+#         city = str(airport.get("city", "")).lower()
+
+#         score = 0
+
+#         if city == location_clean:
+#             score += 100
+#         elif location_clean in city:
+#             score += 70
+
+#         if location_clean in name:
+#             score += 50
+
+#         if "international" in name:
+#             score += 10
+
+#         if score > 0:
+#             city_matches.append((score, iata))
+
+#     if city_matches:
+#         city_matches.sort(reverse=True)
+#         return city_matches[0][1]
+
+#     return None
