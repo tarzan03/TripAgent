@@ -60,7 +60,7 @@ Start the application with hot reload:
 uv run uvicorn app:app --reload
 ```
 
-Visit [http://127.0.0.1:8000](http://127.0.0.1:8000).
+Visit - https://wanderer-ai.onrender.com/.
 
 ## Local PostgreSQL with Docker Compose
 
