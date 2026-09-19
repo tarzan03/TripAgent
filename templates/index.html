@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wanderer — Travel, thoughtfully planned</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+
+  <body>
+    <div class="grain"></div>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Wanderer home">W</a>
+
+      <nav>
+        <a href="#plan">Plan a trip</a>
+        <a href="#discover">Discover</a>
+      </nav>
+
+      <button class="profile-button" type="button" aria-label="Menu">
+        <span></span><span></span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">A more considered way to travel <span>✦</span></p>
+
+        <h1 class="photo-word" aria-label="wanderer">
+          <span class="letter letter-w">w</span>
+          <span class="letter letter-a">a</span>
+          <span class="letter letter-n">n</span>
+          <span class="letter letter-d">d</span>
+          <span class="letter letter-e1">e</span>
+          <span class="letter letter-r">r</span>
+          <span class="letter letter-e2">e</span>
+          <span class="letter letter-r2">r</span>
+        </h1>
+
+        <p class="hero-copy">
+          Tell us where you want to go. Wanderer finds the flights, stays,
+          and experiences worth travelling for.
+        </p>
+
+        <a class="round-arrow" href="#plan" aria-label="Plan a trip">↘</a>
+      </section>
+
+      <section class="planner" id="plan">
+        <div class="planner-heading">
+          <div>
+            <p class="eyebrow">01 / Plan your escape</p>
+            <h2>Where does <em>curiosity</em> take you?</h2>
+          </div>
+        </div>
+
+        <form id="trip-form" class="trip-form">
+          <label class="field destination-field">
+            <span>Tell us your travel plan</span>
+            <input
+              id="destination"
+              name="destination"
+              placeholder="I want a five-day trip to Nepal from Delhi under ₹50,000"
+              autocomplete="off"
+              required
+            />
+            <small id="destination-hint">Describe the trip you have in mind.</small>
+          </label>
+
+          <label class="field">
+            <span>When</span>
+            <input id="dates" name="dates" type="date" />
+          </label>
+
+          <label class="field">
+            <span>Travelers</span>
+            <select id="travelers" name="travelers">
+              <option>Just me</option>
+              <option>2 travelers</option>
+              <option>3–5 travelers</option>
+              <option>6+ travelers</option>
+            </select>
+          </label>
+
+          <button class="plan-button" type="submit">
+            Build my trip <span>→</span>
+          </button>
+        </form>
+
+        <div class="suggestions">
+          <span>Trending now</span>
+          <button type="button" data-destination="A relaxed seven-day trip to Kyoto, Japan">
+            Kyoto
+          </button>
+          <button type="button" data-destination="A food-focused long weekend in Lisbon">
+            Lisbon
+          </button>
+          <button type="button" data-destination="A cultural trip to Marrakech">
+            Marrakech
+          </button>
+          <button type="button" data-destination="A nature trip to Patagonia">
+            Patagonia
+          </button>
+        </div>
+
+        <p id="form-message" class="form-message" aria-live="polite"></p>
+
+        <section
+          id="trip-results"
+          class="trip-results"
+          hidden
+          aria-live="polite"
+        ></section>
+      </section>
+
+      <section class="discover" id="discover">
+        <div class="section-top">
+          <div>
+            <p class="eyebrow">02 / Go deeper</p>
+            <h2>Not just a place.<br /><em>A feeling.</em></h2>
+          </div>
+        </div>
+
+        <div class="mood-grid">
+          <article class="mood-card tall">
+            <img
+              src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=900&q=85"
+              alt="Tropical coastal sunset"
+            />
+            <div class="card-caption">
+              <p>01</p>
+              <h3>Slow mornings,<br />salt in the air</h3>
+              <span>Coastal escapes ↗</span>
+            </div>
+          </article>
+
+          <article class="mood-card">
+            <img
+              src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=900&q=85"
+              alt="City street"
+            />
+            <div class="card-caption">
+              <p>02</p>
+              <h3>Lose yourself<br />in a city</h3>
+              <span>City stories ↗</span>
+            </div>
+          </article>
+
+          <article class="mood-card">
+            <img
+              src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=900&q=85"
+              alt="Mountain valley"
+            />
+            <div class="card-caption">
+              <p>03</p>
+              <h3>Wild, wide<br />open spaces</h3>
+              <span>Into the wild ↗</span>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© wanderer</span>
+      <span>Made for getting lost</span>
+      <a href="#">Back to top ↑</a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+    <script src="/static/script.js"></script>
+  </body>
+</html>
